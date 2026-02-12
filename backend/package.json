@@ -35,5 +35,6 @@
   "directories": {
     "test": "tests"
   },
-  "description": ""
+  "description": "",
+  "type": "commonjs"
 }
