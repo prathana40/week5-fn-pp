@@ -8,11 +8,11 @@ const JobPage = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Fetch the job details from backend
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/jobs/${id}`);
+        // Use relative URL for test compatibility
+        const res = await fetch(`/jobs/${id}`);
         if (!res.ok) throw new Error("Failed to fetch job");
         const data = await res.json();
         setJob(data);
@@ -25,12 +25,11 @@ const JobPage = () => {
     fetchJob();
   }, [id]);
 
-  // Delete job
   const deleteJob = async () => {
     if (!window.confirm("Are you sure you want to delete this job?")) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/jobs/${id}`, { method: "DELETE" });
+      const res = await fetch(`/jobs/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete job");
       alert("Job deleted successfully!");
       navigate("/"); // Go back to home after deletion
