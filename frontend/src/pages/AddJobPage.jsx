@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const AddJobPage = () => {
   const navigate = useNavigate();
 
-  // State for all form fields
+  // State
   const [title, setTitle] = useState("");
   const [type, setType] = useState("Full-Time");
   const [location, setLocation] = useState("");
@@ -14,37 +14,34 @@ const AddJobPage = () => {
   const [contactEmail, setContactEmail] = useState("");
   const [contactPhone, setContactPhone] = useState("");
 
-  // Handle form submission
+  // Submit form
   const submitForm = async (e) => {
     e.preventDefault();
 
-    // Create job object to send to backend
     const newJob = {
       title,
       type,
       location,
       description,
       salary,
-      companyName,
-      contactEmail,
-      contactPhone,
+      company: {
+        name: companyName,
+        contactEmail,
+        contactPhone,
+      },
     };
 
     try {
       const res = await fetch("/api/jobs", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newJob),
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to add job");
-      }
+      if (!res.ok) throw new Error("Failed to add job");
 
-      // Redirect to homepage after successful submission
-      navigate("/");
+      await res.json(); // ensures frontend tests can read response
+      navigate("/"); // go back to homepage
     } catch (error) {
       console.error("Error adding job:", error);
       alert("Failed to add job. Please try again.");
